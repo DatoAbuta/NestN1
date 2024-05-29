@@ -42,15 +42,16 @@ export class ProductsService {
   }
 
   createProduct(body: ProductDTO) {
-    if (!body.name || !body.created || !body.price)
+    if (!body.name || !body.price)
       throw new HttpException(
-        'Name, Date And Price Are Required!',
+        'Name And Price Are Required!',
         HttpStatus.BAD_REQUEST,
       );
     const lastId = this.products[this.products.length - 1]?.id || 0;
     const newProduct = {
       id: lastId + 1,
       ...body,
+      created: new Date().toISOString(),
     };
 
     this.products.push(newProduct);
@@ -58,7 +59,16 @@ export class ProductsService {
     return newProduct;
   }
 
-  deleteUser(id: number) {
+  getExpenseById(id: number) {
+    const NewProduct = this.products.find((el) => el.id === Number(id));
+
+    if (!NewProduct)
+      throw new HttpException('Not Found Product', HttpStatus.NOT_FOUND);
+
+    return NewProduct;
+  }
+
+  deleteProduct(id: number) {
     const index = this.products.findIndex((el) => el.id === id);
 
     if (index === -1)

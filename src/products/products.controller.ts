@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductDTO } from './products.dto';
@@ -19,14 +20,19 @@ export class ProductsController {
     return this.productsService.getAll();
   }
 
+  @Get('/:id')
+  getExpenseById(@Param('id', ParseIntPipe) id) {
+    return this.productsService.getExpenseById(Number(id));
+  }
+
   @Post()
   createProduct(@Body() product: ProductDTO) {
     return this.productsService.createProduct(product);
   }
 
   @Delete('/:id')
-  deleteUser(@Param('id') id) {
-    return this.productsService.deleteUser(Number(id));
+  deleteProduct(@Param('id') id) {
+    return this.productsService.deleteProduct(Number(id));
   }
 
   @Put('/:id')
